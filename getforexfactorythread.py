@@ -45,24 +45,29 @@ def download_img(posts,baseURL,file_path):
         urllib.request.urlretrieve(imgUrl, os.path.basename(imgUrl))
 
 if __name__ == '__main__':
-    threadid = 830795
+    threadid = 792598
+    topic = "Most Famous Blessing 3.9.6 EA and Setfiles"
     frompage = 1
-    endpage = 50
+    endpage = 36
     baseURL = "https://www.forexfactory.com/"
-    file = "C:/temp/test.html"
-    dest = file.replace('test',str(threadid) + '-' + str(frompage) + '-' + str(endpage))     
+    file = "./template.html"
 
+    dest = topic + str(threadid) + '-' + str(frompage) + '-' + str(endpage) + '.html'    
+    context = ''
     with open(file,'r') as f:
         c = f.read()
 
     while frompage<= endpage :
         posts = getThread(baseURL, threadid,frompage)
-        c = c.replace('endofthread', str(posts) + '\nendofthread')
+        context += str(posts) + '\n'
         frompage += 1
 
-    c = c.replace('src="attachment.php?attachmentid','src="' + baseURL + 'attachment.php?attachmentid')    
+    context = context.replace('href="','href="' + baseURL )
+    context = context.replace('src="attachment.php?attachmentid','src="' + baseURL + 'attachment.php?attachmentid')    
 
-
+    c = c.replace('endofthread', context + '\n')
+    c = c.replace('TitleHere', topic)
+    
     with open(dest,'wb') as f:
         f.write(c.encode('ascii', 'xmlcharrefreplace'))
     print('done!')   
